@@ -18,7 +18,7 @@ from selenium.webdriver.common.by import By
 
 BASE_URL = "https://webscraper.io/"
 HOME_URL = urljoin(BASE_URL, "test-sites/e-commerce/more/")
-COMPUTERS_ULR = urljoin(BASE_URL, "test-sites/e-commerce/more/computers/")
+COMPUTERS_URL = urljoin(BASE_URL, "test-sites/e-commerce/more/computers/")
 PHONES_URL = urljoin(BASE_URL, "test-sites/e-commerce/more/phones/")
 LAPTOPS_URL = urljoin(BASE_URL, "test-sites/e-commerce/more/computers/laptops")
 TABLETS_URL = urljoin(BASE_URL, "test-sites/e-commerce/more/computers/tablets")
@@ -26,7 +26,7 @@ TOUCHES_URL = urljoin(BASE_URL, "test-sites/e-commerce/more/phones/touch")
 
 LINKS_F_NAME = {
     HOME_URL: "home",
-    COMPUTERS_ULR: "computers",
+    COMPUTERS_URL: "computers",
     PHONES_URL: "phones",
     LAPTOPS_URL: "laptops",
     TABLETS_URL: "tablets",
@@ -111,7 +111,7 @@ def clean_text(text: str) -> str:
     return text.replace("\xa0", " ").strip()
 
 
-def pars_single_card(card: Tag) -> Product:
+def parse_single_card(card: Tag) -> Product:
     title = clean_text(card.select(".title")[0]["title"])
     description = clean_text(str(card.select(".description")[0].contents[0]))
     price = str(card.select(".price")[0].contents[0]).replace("$", "")
@@ -147,7 +147,7 @@ def get_all_products() -> None:
         if more_button_on_page:
             bs_page = prepare_soup_page_with_more_button(page_link)
         cards = get_cards(bs_page)
-        parsed_cards = [pars_single_card(card) for card in cards]
+        parsed_cards = [parse_single_card(card) for card in cards]
         f_name = LINKS_F_NAME[page_link]
         write_to_csv(parsed_cards, f_name)
 
